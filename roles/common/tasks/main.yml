@@ -1,0 +1,46 @@
+---
+# tasks file for common
+- name: Time zone
+  become: True
+  shell: "timedatectl | grep 'Time zone' | awk '{print  $3}'"
+  register: time_zone
+  changed_when: False
+  ignore_errors: yes
+
+- name: Install tools
+  become: true
+  shell: |
+    timedatectl set-timezone "{{ os_time_zone }}"
+  when:
+    - time_zone.stdout != "{{ os_time_zone }}"
+
+- name: install epel
+  become: true
+  yum:
+    name: epel-release
+    state: installed
+
+- name: yum update
+  become: true
+  yum:
+    update_cache: yes
+
+- name: install development tools
+  become: true
+  yum:
+    name: "@Development tools"
+    state: present
+    skip_broken: true
+
+#- name: common | Install package dependencies
+#  become: true
+#  yum:
+#    name: "{{item}}"
+#  with_items:
+#    - make
+#    - gcc
+#    - libssl-dev
+#  when: vpnserver_present is failed
+#  tags:
+#    - softether
+

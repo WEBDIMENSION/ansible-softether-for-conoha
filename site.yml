@@ -1,0 +1,28 @@
+---
+- name: softether
+  hosts: softether
+  roles:
+    - role: users
+      tags:
+        - users
+
+    - role: sshd
+      tags:
+        - sshd
+
+    - role: common
+      tags:
+        - common
+
+    - role: firewalld
+      tags:
+        - firewalld
+
+    - role: hostname
+      tags:
+        - hostname
+
+    - role: softether
+      tags:
+        - softether
+

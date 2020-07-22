@@ -1,0 +1,5 @@
+
+---
+# defaults file for Group CentOS7
+# timezone
+os_time_zone: "Asia/Tokyo"

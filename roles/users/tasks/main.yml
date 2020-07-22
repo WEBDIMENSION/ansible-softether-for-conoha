@@ -1,0 +1,57 @@
+---
+# tasks file for roles/ansible-useadd
+- name: get hostnname
+  shell: >
+    hostname
+  register: check_hostname
+  changed_when: False
+  ignore_errors: yes
+
+- name: connect test
+  debug:
+    msg: "HOSTNAME is {{ check_hostname.stdout }}"
+
+- name: user-control
+  become: true
+  user:
+    name: "{{ item.name }}"
+    groups: "{{ item.groups }}"
+    state:  "{{ item.state }}"
+    remove:  "{{ item.remove }}"
+    create_home: "{{ item.create_home }}"
+    password: "{{ item.password }}"
+    shell: "{{ item.login_shell }}"
+    comment: "{{ item.comment }}"
+    expires: "{{ item.expires}}"
+  with_items: "{{ users }}"
+
+- name: Set public-key
+  become: true
+  authorized_key:
+    user: "{{ item.name }}"
+    state: "{{ item.state }}"
+    key: "{{ lookup('file', '{{ item.key }}') }}"
+  when: item.sudo == 'present'
+  with_items: "{{ users }}"
+
+- name: Set secret-key
+  become: true
+  copy:
+    content: "{{ lookup('file', '{{ item.secret_key }}') }}"
+    dest: "/home/{{ item.name }}/.ssh/id_rsa"
+    owner: "{{ item.name }}"
+    group: "{{ item.name }}"
+    mode: '600'
+  with_items: "{{ users }}"
+  when:
+    - item.secret_key is defined
+    - item.create_home == 'yes'
+
+- name: add sudo authorize
+  become: true
+  lineinfile:
+    dest: /etc/sudoers
+    backup: yes
+    line: "{{ item.name }} ALL=(ALL) NOPASSWD: ALL"
+  when: item.sudo == 'present'
+  with_items: "{{ users }}"

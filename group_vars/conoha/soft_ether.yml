@@ -1,0 +1,61 @@
+---
+# defaults file for sa-vpn-softether
+
+role_dir: "{{role_path}}"
+
+softether_version: "4.34-9745-beta"
+# dummy why would download link contain build date?
+softether_version_date: "2020.04.05"
+
+# set true to add {{softether_home}} to PATH env via /etc/profile.d/softether.sh
+option_add_to_path: false
+
+#SecureNAT is a combination of Virtual NAT and DHCP Server function. You can enable SecureNAT using the command below:
+softether_option_securenat: true
+softether_option_bridge: false
+
+softether_location: /opt
+softether_home: "{{softether_location}}/vpnserver"
+softether_lang: en
+softether_fqdn: "{{ansible_host}}"
+
+
+# ============== IPSEC ===================
+softether_option_ipsec: true
+softether_ipsec_l2tp: yes
+softether_ipsec_l2tpraw: yes
+softether_ipsec_etherip: no
+softether_ipsec_presharedkey: "{{ secret.softether_ipsec_presharedkey }}"
+# /============== IPSEC ===================
+
+
+# ============== OPENVPN ===================
+softether_option_openvpn: true
+softether_openvpn_port: 1194
+softether_openvpn_config: "{{softether_home}}/generated/openvpn_config.zip"
+# /============== OPENVPN ===================
+
+
+
+# ============== Bridge ===================
+softether_bridge_device: soft
+softether_bridge_tap: no
+# ============== /Bridge ===================
+
+# ============== Administrator ===================
+softether_administrator_password: "{{ secret.softether_administrator_password }}"
+
+# ============== Users ===================
+softether_vpn_users: "{{ secret.softether_vpn_users }}"
+# ============== /Users ===================
+
+softether_sysctl_conf_lines:
+  - {
+      name: 'net.ipv4.ip_forward',
+      value: '1'
+    }
+
+
+# =========== INIT SCENARIONS ===============
+
+softether_init_script: scenarios/create_hub

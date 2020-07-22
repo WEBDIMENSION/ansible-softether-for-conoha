@@ -1,0 +1,8 @@
+---
+# handlers file for roles/firewalld
+- name: Restart firewalld
+  become: yes
+  systemd:
+    state: restarted
+    name: firewalld
+    enabled: yes

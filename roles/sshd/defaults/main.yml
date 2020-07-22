@@ -1,0 +1,3 @@
+---
+# defaults file for roles/sshd
+sshd_port: 22
