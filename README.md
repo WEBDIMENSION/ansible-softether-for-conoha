@@ -8,7 +8,9 @@
 ***Server***
 - CentOS 7.8 (Conoha VPS 512MB)
 
-## 振る舞い
+## 概要
+Conoha VPNは立ち上げ時Rootでのログインのみとなる。
+Rootログインのみの状況からVPN(SoftEther)を構築
 - Conoha にてVPSサーバー立ち上げ
 - AnsibleにてVPN構築
   - Rootでログイン 
@@ -22,8 +24,12 @@
 ## 参考サイト 
 - Ansible galaxy  [sa-vpn-softether](https://galaxy.ansible.com/softasap/sa-vpn-softether)
 - Github [sa-vpn-softether](https://github.com/softasap/sa-vpn-softether)
-  
-## Setting
+***改変箇所***
+- AnsibleからSofteher Administrator password を設定できる。
+  pipからInstallするpexpectでは意図するうごきならなかったため、
+  shellモジュールでexpectを展開させた。
+
+## 設定
 ### hosts/conoha
 ```yml
 [softether]
@@ -117,26 +123,29 @@ softether_vpn_users:
   }
 ```
 
-## Exec  Ansible
+## Ansible 実行
 ```bash
 ansible-playbook -i hosts/conoha site.yml
 ```
 
-## Download client tool
+## クライアントツールのダウンロード
 [SoftEther Client](https://www.softether-download.com/en.aspx?product=softether)
 
 ----
+### 機密情報の暗号化
 ### vault pass
 ```bash
 echo 'vault_password_file = ./vaultpass' > ansible.cfg
 cp valtpass.sample valtpass
 echo 'your_vault_password' > vaultpass
 ```
-# Encrypt
+#### 暗号化
 ```bash
 ansible-vault encrypt group_vars/*/secret.yml 
 ```
-# Decrypt
+#### 復号化
 ```bash
 ansible-vault decrypt group_vars/*/secret.yml 
 ```
+## License
+MIT
