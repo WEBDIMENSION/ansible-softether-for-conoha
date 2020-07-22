@@ -1,13 +1,6 @@
 # Conoha VPS サーバーでVPN (SoftEther) をAnsibleで構築
+
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
-
-## 環境
-***Local***
-- ubuntu 18.04
-- ansible 2.9.7 
-
-***Server***
-- CentOS 7.8 (Conoha VPS 512MB)
 
 ## 概要
 Conoha VPNは立ち上げ時Rootでのログインのみとなる。
@@ -19,12 +12,25 @@ Rootログインのみの状況からVPN(SoftEther)を構築
   - sshd Root login を無効
   - パスワード認証無効  (鍵認証のみ)
   - Firewalld 設定 
-  - Hostname 設定 
+  - hostname 設定 
   - SoftEther インストール
   
+## 環境
+***Local***
+- Ubuntu 18.04
+- Ansible 2.9.7 
+
+***Server***
+- CentOS 7.8 (Conoha VPS 512MB)
+
 ## 参考サイト 
-- Ansible galaxy  [sa-vpn-softether](https://galaxy.ansible.com/softasap/sa-vpn-softether)
-- Github [sa-vpn-softether](https://github.com/softasap/sa-vpn-softether)
+- <a href="https://galaxy.ansible.com/softasap/sa-vpn-softether" target="_blank">
+  Ansible galaxy  [sa-vpn-softether]
+  </a>
+- <a href="https://github.com/softasap/sa-vpn-softether" target="_blank">
+  Github [sa-vpn-softether]
+  </a>
+
 ***改変箇所***
 - AnsibleからSofteher Administrator password を設定できる。
   pipからInstallするpexpectでは意図するうごきならなかったため、
@@ -76,26 +82,7 @@ user_groups: # groups
 
 ### group_vars/conoha/sshs.yml
 ```yml
-sshd_port: 50022 #Default 
-```
-
-### group_vars/conoha/sshs.yml
-```yml
-.
-.
-.
-
-# ============== Users ===================
-softether_vpn_users:
-  - {
-      name: "{{ secret.softether_user }}",
-      password: "{{ secret.softether_password }}"
-    }
-# ============== /Users ===================
-.
-.
-.
-
+sshd_port: 50022 #Default 22
 ```
 
 ### group_vars/conoha/secret.yml 
@@ -113,7 +100,7 @@ secret:
   softether_ipsec_presharedkey: "Share_Key"  #Ipsec 共有キー
   softether_administrator_password: 'Softether_Administrator_Password' #SoftEtherの管理者パスワード
   
-softether_vpn_users:
+softether_vpn_users: # VPN Users
   - {
     name: "{{ softether_worker001 }}",
     password: "{{ softether_worker001_password }}"
@@ -130,9 +117,11 @@ ansible-playbook -i hosts/conoha site.yml
 ```
 
 ## クライアントツールのダウンロード
-[SoftEther Client](https://www.softether-download.com/en.aspx?product=softether)
 
-----
+<a href="https://www.softether-download.com/en.aspx?product=softether" target="_blank">
+Softether Download Center
+</a>
+
 ### 機密情報の暗号化
 ### vault pass
 ```bash
@@ -148,5 +137,6 @@ ansible-vault encrypt group_vars/*/secret.yml
 ```bash
 ansible-vault decrypt group_vars/*/secret.yml 
 ```
+
 ## License
 MIT
