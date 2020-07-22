@@ -1,4 +1,5 @@
 # Conoha VPS サーバーでVPN (SoftEther) をAnsibleで構築
+[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 
 ## 環境
 ***Local***
