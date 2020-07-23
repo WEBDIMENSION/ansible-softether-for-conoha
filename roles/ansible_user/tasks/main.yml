@@ -1,0 +1,61 @@
+---
+# tasks file for roles/ansible-useadd
+- name: get hostnname
+  shell: >
+    hostname
+  register: check_hostname
+  changed_when: False
+  ignore_errors: yes
+
+- name: connect test
+  debug:
+    msg: "HOSTNAME is {{ check_hostname.stdout }}"
+
+- name: user-control
+  become: true
+  user:
+    name: "{{ item.value.name }}"
+    groups: "{{ item.value.groups }}"
+    state:  "{{ item.value.state }}"
+    remove:  "{{ item.value.remove }}"
+    create_home: "{{ item.value.create_home }}"
+    password: "{{ item.value.password | password_hash('sha512') }}"
+    shell: "{{ item.value.login_shell }}"
+    comment: "{{ item.value.comment }}"
+    expires: "{{ item.value.expires }}"
+  with_dict: "{{ ansible_users }}"
+
+- name: Set public-key
+  become: true
+  authorized_key:
+    user: "{{ item.value.name }}"
+    state: "{{ item.value.state }}"
+    key: "{{ lookup('file', item.value.key) }}"
+  when: item.value.sudo == 'present'
+  with_dict: "{{ ansible_users }}"
+
+- name: Set secret-key
+  become: true
+  copy:
+    content: "{{ lookup('file', item.value.secret_key) }}"
+    dest: "/home/{{ item.value.name }}/.ssh/id_rsa"
+    owner: "{{ item.value.name }}"
+    group: "{{ item.value.name }}"
+    mode: '600'
+  with_dict: "{{ ansible_users }}"
+  when:
+    - item.value.secret_key is defined
+    - item.value.create_home == 'yes'
+
+- name: add sudo authorize
+  become: true
+  lineinfile:
+    dest: "/etc/sudoers"
+    backup: yes
+    line: "{{ item.value.name }} ALL=(ALL) NOPASSWD: ALL"
+  when: item.value.sudo == 'present'
+  with_dict: "{{ ansible_users }}"
+
+
+
+

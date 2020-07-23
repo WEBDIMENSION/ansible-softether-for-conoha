@@ -1,0 +1,51 @@
+---
+# tasks file for roles/bash_it
+- name: debug
+  debug:
+    msg: "{{ home_path }}/.bash_it"
+
+- name: check installed bash_it
+  stat:
+    path: "{{ home_path }}/.bash_it"
+  register: chk_dir
+  changed_when: False
+  ignore_errors: yes
+
+- name: git clone bash_it
+  git:
+    repo: 'https://github.com/bash-it/bash-it.git'
+    dest: "{{ home_path }}/.bash_it"
+    depth: 1
+    version: "master"
+  when: chk_dir.stat.exists is false
+
+- name: bash_it install when not installed
+  shell: |
+    ./install.sh -s
+  args:
+    chdir: '{{ home_path }}/.bash_it/'
+  when: chk_dir.stat.exists is false
+
+- name: change theme bash_it
+  lineinfile:
+    dest: '{{ home_path }}/.bashrc'
+    regexp:      "^export BASH_IT_THEME"
+    line:         "export BASH_IT_THEME='{{ bash_it_theme }}'"
+  when:
+    - bash_it_theme is defined
+#    - chk_dir.stat.exists is false
+
+
+#- name: change theme bash_it
+#  lineinfile:
+#    dest: "{{ home_path }}/.bashrc"
+#    regexp: "^export BASH_IT_THEME"
+#    insertafter: "^#export BASH_IT_THEME"
+#    line: "export BASH_IT_THEME='{{ bash_it_theme }}'"
+#  when:
+#    - chk_dir.stat.exists == false
+#    - bash_it_theme is defined
+
+
+
+

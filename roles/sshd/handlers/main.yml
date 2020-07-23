@@ -1,7 +1,7 @@
 ---
 # handlers file for roles/sshd
 - name: Restart sshd
-  become: true
+  become: yes
   systemd:
     state: restarted
     name: sshd

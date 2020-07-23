@@ -1,0 +1,58 @@
+---
+# tasks file for roles/users
+# user-control
+- name: debug
+  debug:
+    msg: "{{ users }}"
+
+- name: user-control
+  become: true
+  user:
+    name: "{{ item.value.name }}"
+    #group: "{{ item.group }}"
+    #groups: "{{ item.value.groups }}"
+    state:  "{{ item.value.state }}"
+    remove:  "{{ item.value.remove }}"
+    create_home: "{{ item.value.create_home }}"
+    password: "{{ item.value.password | password_hash('sha512') }}"
+    shell: "{{ item.value.shell }}"
+    comment: "{{ item.value.comment }}"
+    expires: "{{ item.value.expires }}"
+  #changed_when: False
+  with_dict: "{{ users }}"
+  when: users is defined
+
+- name: Set public-key
+  become: true
+  authorized_key:
+    user: "{{ item.value.name }}"
+    state: "{{ item.value.state }}"
+    key: "{{ lookup('file', item.value.key) }}"
+  with_dict: "{{ users }}"
+  when: users is defined
+
+- name: Set secret-key
+  become: true
+  copy:
+    content: "{{ lookup('file', item.value.secret_key) }}"
+    dest: "/home/{{ item.value.name }}/.ssh/id_rsa"
+    owner: "{{ item.value.name }}"
+    group: "{{ item.value.group }}"
+    mode: '600'
+  with_dict: "{{ users }}"
+  when:
+    - users is defined
+    - item.value.secret_key is defined
+    - item.value.create_home == 'yes'
+
+- name: add sudo authorize
+  become: true
+  lineinfile:
+    dest: /etc/sudoers
+    backup: yes
+    line: "{{ item.value.name }} ALL=(ALL) NOPASSWD: ALL"
+  when:
+    - users is defined
+    - item.value.sudo == 'present'
+  with_dict: "{{ users }}"
+  notify: Restart sshd

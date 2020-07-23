@@ -2,27 +2,42 @@
 - name: softether
   hosts: softether
   roles:
-    - role: users
+    - role: common
       tags:
-        - users
+        - common
+        - softether
+
+    - role: ansible_user
+      tags:
+        - init
+        - softether
 
     - role: sshd
       tags:
         - sshd
-
-    - role: common
-      tags:
-        - common
-
-    - role: firewalld
-      tags:
-        - firewalld
+        - softether
 
     - role: hostname
       tags:
         - hostname
+        - softether
+
+    - role: users
+      tags:
+        - users
+        - softether
+
+    - role: firewalld
+      tags:
+        - firewalld
+        - softether
 
     - role: softether
       tags:
         - softether
+
+    - role: bash_it
+      tags:
+        - bash_it
+        - tools
 
