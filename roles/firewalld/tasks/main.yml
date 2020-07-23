@@ -4,7 +4,7 @@
   become: yes
   yum:
     name: firewalld
-    state: latest
+    state: installed
 
 - name: Start firewalld
   become: yes

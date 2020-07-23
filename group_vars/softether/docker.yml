@@ -1,0 +1,25 @@
+mount_dir: '/softether'
+project_name: 'Ansible-SoftEther'
+docker_server:
+  hosts:
+    - host_ip: "127.0.0.1"
+      ssh_port: 2223
+      image_tag: "softether"
+      container_tag: "softether001"
+      container_ip: ""
+    - host_ip: "127.0.0.1"
+      ssh_port: 2224
+      image_tag: "softether"
+      container_tag: "softether002"
+      container_ip: ""
+  image_tag: "softether"
+  inventory_name: "docker_server"
+docker_client:
+  hosts:
+    - host_ip: "127.0.0.1"
+      ssh_port: 2222
+      image_tag: "softether_client"
+      container_tag: "softether_client"
+      container_ip: ""
+  image_tag: "softether"
+  inventory_name: "docker_client"

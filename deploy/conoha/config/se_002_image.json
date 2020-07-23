@@ -1,0 +1,32 @@
+{
+    "status": "ACTIVE",
+    "updated": "2020-05-20T03:53:11Z",
+    "links": [
+        {
+            "href": "https://compute.tyo2.conoha.io/v2/07dfade82c884c7d91dc133c7f068d8c/images/6ce9bb88-b33c-413e-8a22-e71ab3a4bfb5",
+            "rel": "self"
+        },
+        {
+            "href": "https://compute.tyo2.conoha.io/07dfade82c884c7d91dc133c7f068d8c/images/6ce9bb88-b33c-413e-8a22-e71ab3a4bfb5",
+            "rel": "bookmark"
+        },
+        {
+            "href": "https://image-service.tyo2.conoha.io/07dfade82c884c7d91dc133c7f068d8c/images/6ce9bb88-b33c-413e-8a22-e71ab3a4bfb5",
+            "type": "application/vnd.openstack.image",
+            "rel": "alternate"
+        }
+    ],
+    "id": "6ce9bb88-b33c-413e-8a22-e71ab3a4bfb5",
+    "OS-EXT-IMG-SIZE:size": 2451832832,
+    "name": "vmi-centos-7.8-amd64-30gb",
+    "created": "2020-05-20T03:52:49Z",
+    "minDisk": 30,
+    "progress": 100,
+    "minRam": 0,
+    "metadata": {
+        "hw_qemu_guest_agent": "yes",
+        "display_order": "104",
+        "os_type": "lin",
+        "dst": "CentOS-7.8-64bit"
+    }
+}

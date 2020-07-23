@@ -1,0 +1,22 @@
+{
+  'server': {
+    'security_groups': [
+      {
+        'name': 'default'
+      }
+    ],
+    'OS-DCF:diskConfig': 'MANUAL',
+    'id': '871cd294-6037-4982-8190-7cc01578532f',
+    'links': [
+      {
+        'href': 'https://compute.tyo2.conoha.io/v2/07dfade82c884c7d91dc133c7f068d8c/servers/871cd294-6037-4982-8190-7cc01578532f',
+        'rel': 'self'
+      },
+      {
+        'href': 'https://compute.tyo2.conoha.io/07dfade82c884c7d91dc133c7f068d8c/servers/871cd294-6037-4982-8190-7cc01578532f',
+        'rel': 'bookmark'
+      }
+    ],
+    'adminPass': 'VV3bD1m3ns10n'
+  }
+}

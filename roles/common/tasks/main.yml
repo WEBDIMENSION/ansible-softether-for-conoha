@@ -7,12 +7,12 @@
   changed_when: False
   ignore_errors: yes
 
-- name: Install tools
+- name: Install Tmezone
   become: true
   shell: |
     timedatectl set-timezone "{{ os_time_zone }}"
   when:
-    - time_zone.stdout != "{{ os_time_zone }}"
+    - time_zone.stdout != os_time_zone
 
 - name: install epel
   become: true
@@ -23,7 +23,9 @@
 - name: yum update
   become: true
   yum:
-    update_cache: yes
+    name: '*'
+    # state: latest
+    # update_cache: yes
 
 - name: install development tools
   become: true

@@ -1,2 +1,3 @@
 ---
-# defaults file for roles/hostname
+# example
+hostname: 'example.yourdomain'

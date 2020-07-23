@@ -1,0 +1,22 @@
+{
+    "name": "g-c1m512d30",
+    "links": [
+        {
+            "href": "https://compute.tyo2.conoha.io/v2/07dfade82c884c7d91dc133c7f068d8c/flavors/93b572a0-f1c7-4753-8384-47d9dcc826ee",
+            "rel": "self"
+        },
+        {
+            "href": "https://compute.tyo2.conoha.io/07dfade82c884c7d91dc133c7f068d8c/flavors/93b572a0-f1c7-4753-8384-47d9dcc826ee",
+            "rel": "bookmark"
+        }
+    ],
+    "ram": 512,
+    "OS-FLV-DISABLED:disabled": false,
+    "vcpus": 1,
+    "swap": "",
+    "os-flavor-access:is_public": true,
+    "rxtx_factor": 1,
+    "OS-FLV-EXT-DATA:ephemeral": 0,
+    "disk": 30,
+    "id": "93b572a0-f1c7-4753-8384-47d9dcc826ee"
+}

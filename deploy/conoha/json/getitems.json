@@ -1,0 +1,16 @@
+{
+  'order_items': [
+    {
+      'uu_id': '04266146-8008-470a-9da7-3fbfb5ad1d34',
+      'service_name': 'VPS',
+      'service_start_date': '2020-06-02T13:51:19Z',
+      'item_status': 'Active'
+    },
+    {
+      'uu_id': '0f56a71e-abca-4794-8e14-c68ab3062c04',
+      'service_name': 'VPS',
+      'service_start_date': '2020-07-18T02:02:27Z',
+      'item_status': 'Active'
+    }
+  ]
+}

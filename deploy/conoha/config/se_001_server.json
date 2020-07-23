@@ -1,0 +1,156 @@
+{
+    "security_groups": [
+        {
+            "name": "default"
+        }
+    ],
+    "OS-DCF:diskConfig": "MANUAL",
+    "id": "4e2facff-7edb-47fb-bcce-b6979d09bfb8",
+    "links": [
+        {
+            "href": "https://compute.tyo2.conoha.io/v2/07dfade82c884c7d91dc133c7f068d8c/servers/4e2facff-7edb-47fb-bcce-b6979d09bfb8",
+            "rel": "self"
+        },
+        {
+            "href": "https://compute.tyo2.conoha.io/07dfade82c884c7d91dc133c7f068d8c/servers/4e2facff-7edb-47fb-bcce-b6979d09bfb8",
+            "rel": "bookmark"
+        }
+    ],
+    "adminPass": "VV3bD1m3ns10n",
+    "flavor": {
+        "name": "g-c1m512d30",
+        "links": [
+            {
+                "href": "https://compute.tyo2.conoha.io/v2/07dfade82c884c7d91dc133c7f068d8c/flavors/93b572a0-f1c7-4753-8384-47d9dcc826ee",
+                "rel": "self"
+            },
+            {
+                "href": "https://compute.tyo2.conoha.io/07dfade82c884c7d91dc133c7f068d8c/flavors/93b572a0-f1c7-4753-8384-47d9dcc826ee",
+                "rel": "bookmark"
+            }
+        ],
+        "ram": 512,
+        "OS-FLV-DISABLED:disabled": false,
+        "vcpus": 1,
+        "swap": "",
+        "os-flavor-access:is_public": true,
+        "rxtx_factor": 1,
+        "OS-FLV-EXT-DATA:ephemeral": 0,
+        "disk": 30,
+        "id": "93b572a0-f1c7-4753-8384-47d9dcc826ee"
+    },
+    "image": {
+        "status": "ACTIVE",
+        "updated": "2020-05-20T03:53:11Z",
+        "links": [
+            {
+                "href": "https://compute.tyo2.conoha.io/v2/07dfade82c884c7d91dc133c7f068d8c/images/6ce9bb88-b33c-413e-8a22-e71ab3a4bfb5",
+                "rel": "self"
+            },
+            {
+                "href": "https://compute.tyo2.conoha.io/07dfade82c884c7d91dc133c7f068d8c/images/6ce9bb88-b33c-413e-8a22-e71ab3a4bfb5",
+                "rel": "bookmark"
+            },
+            {
+                "href": "https://image-service.tyo2.conoha.io/07dfade82c884c7d91dc133c7f068d8c/images/6ce9bb88-b33c-413e-8a22-e71ab3a4bfb5",
+                "type": "application/vnd.openstack.image",
+                "rel": "alternate"
+            }
+        ],
+        "id": "6ce9bb88-b33c-413e-8a22-e71ab3a4bfb5",
+        "OS-EXT-IMG-SIZE:size": 2451832832,
+        "name": "vmi-centos-7.8-amd64-30gb",
+        "created": "2020-05-20T03:52:49Z",
+        "minDisk": 30,
+        "progress": 100,
+        "minRam": 0,
+        "metadata": {
+            "hw_qemu_guest_agent": "yes",
+            "display_order": "104",
+            "os_type": "lin",
+            "dst": "CentOS-7.8-64bit"
+        }
+    },
+    "detail": {
+        "status": "ACTIVE",
+        "updated": "2020-08-14T06:07:20Z",
+        "hostId": "304f74f4942ad8a0d96ff4be41f2435bee2d60426dee7ee0ada007c7",
+        "OS-EXT-SRV-ATTR:host": "cn-f12246.g2.tyo2.v4",
+        "addresses": {
+            "ext-118-27-10-0-23": [
+                {
+                    "OS-EXT-IPS-MAC:mac_addr": "02:02:76:1b:0b:a0",
+                    "version": 6,
+                    "addr": "2400:8500:1801:405:118:27:11:160",
+                    "OS-EXT-IPS:type": "fixed"
+                },
+                {
+                    "OS-EXT-IPS-MAC:mac_addr": "02:02:76:1b:0b:a0",
+                    "version": 4,
+                    "addr": "118.27.11.160",
+                    "OS-EXT-IPS:type": "fixed"
+                }
+            ]
+        },
+        "links": [
+            {
+                "href": "https://compute.tyo2.conoha.io/v2/07dfade82c884c7d91dc133c7f068d8c/servers/4e2facff-7edb-47fb-bcce-b6979d09bfb8",
+                "rel": "self"
+            },
+            {
+                "href": "https://compute.tyo2.conoha.io/07dfade82c884c7d91dc133c7f068d8c/servers/4e2facff-7edb-47fb-bcce-b6979d09bfb8",
+                "rel": "bookmark"
+            }
+        ],
+        "key_name": null,
+        "image": {
+            "id": "6ce9bb88-b33c-413e-8a22-e71ab3a4bfb5",
+            "links": [
+                {
+                    "href": "https://compute.tyo2.conoha.io/07dfade82c884c7d91dc133c7f068d8c/images/6ce9bb88-b33c-413e-8a22-e71ab3a4bfb5",
+                    "rel": "bookmark"
+                }
+            ]
+        },
+        "OS-EXT-STS:task_state": null,
+        "OS-EXT-STS:vm_state": "active",
+        "OS-EXT-SRV-ATTR:instance_name": "tyo2-001450ea",
+        "OS-SRV-USG:launched_at": "2020-08-14T06:07:20.000000",
+        "OS-EXT-SRV-ATTR:hypervisor_hostname": "cn-f12246.g2.tyo2.v4",
+        "flavor": {
+            "id": "93b572a0-f1c7-4753-8384-47d9dcc826ee",
+            "links": [
+                {
+                    "href": "https://compute.tyo2.conoha.io/07dfade82c884c7d91dc133c7f068d8c/flavors/93b572a0-f1c7-4753-8384-47d9dcc826ee",
+                    "rel": "bookmark"
+                }
+            ]
+        },
+        "id": "4e2facff-7edb-47fb-bcce-b6979d09bfb8",
+        "security_groups": [
+            {
+                "name": "default"
+            }
+        ],
+        "OS-SRV-USG:terminated_at": null,
+        "OS-EXT-AZ:availability_zone": "nova",
+        "user_id": "925182e5d0114d748da6d72cdb29e086",
+        "name": "118-27-11-160",
+        "created": "2020-08-14T06:07:13Z",
+        "tenant_id": "07dfade82c884c7d91dc133c7f068d8c",
+        "OS-DCF:diskConfig": "MANUAL",
+        "os-extended-volumes:volumes_attached": [],
+        "accessIPv4": "",
+        "accessIPv6": "",
+        "progress": 0,
+        "OS-EXT-STS:power_state": 1,
+        "config_drive": "True",
+        "metadata": {
+            "instance_name_tag": "se_001",
+            "backup_status": "active",
+            "backup_id": "",
+            "properties": "{\"vnc_keymap\":\"ja\",\"hw_video_model\":\"vga\",\"hw_vif_model\":\"virtio\",\"hw_disk_bus\":\"virtio\",\"cdrom_path\":\"\"}",
+            "backup_set": "0"
+        }
+    }
+}

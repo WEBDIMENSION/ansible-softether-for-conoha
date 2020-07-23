@@ -1,0 +1,10 @@
+---
+# tasks file for roles/users
+# group-control
+- name: group control
+  become: true
+  group:
+    name: "{{ item.key }}"
+    state: "{{ item.value.state }}"
+  with_dict: "{{ user_groups }}"
+  when: user_groups is defined

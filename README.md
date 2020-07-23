@@ -1,6 +1,7 @@
 # Conoha VPS サーバーでVPN (SoftEther) をAnsibleで構築
 
-[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/webdimension/ansible-softether-for-conoha?include_prereleases)
+![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/webdimension/ansible-softether-for-conoha?include_prereleases)
 
 ## 概要
 Conoha VPNは立ち上げ時Rootでのログインのみとなる。
@@ -18,10 +19,11 @@ Rootログインのみの状況からVPN(SoftEther)を構築
 ## 環境
 ***Local***
 - Ubuntu 18.04
-- Ansible 2.9.7 
+- python 3.7.6
+- Docker version 19.03.12
 
 ***Server***
-- CentOS 7.8 (Conoha VPS 512MB)
+- CentOS 7.8 (Conoha VPS 512MB) 
 
 ## 参考サイト 
 - <a href="https://galaxy.ansible.com/softasap/sa-vpn-softether" target="_blank">
@@ -37,25 +39,53 @@ Rootログインのみの状況からVPN(SoftEther)を構築
   shellモジュールでexpectを展開させた。
 
 ## 設定
-### hosts/conoha
-```yml
-[softether]
-# Server IP address
-target_server_name ansible_host=xxx.xxx.xxx.xxx
-
-[softether:vars]
-ansible_ssh_user=root
-ansible_port=22
-ansible_ssh_pass={{ secret.root_user_password }}
-
-[conoha]
-target_server_name
-```
-
 ### group_vars/conoha/common.yml
-``` yml
-# timezone
-os_time_zone: "Asia/Tokyo"
+```yml
+ansible_users:
+  master:
+    name: 'ansible'  # Ansible user name
+    groups: 'wheel'
+    append: 'yes'
+    state: 'present'
+    remove: 'no'
+    password: "{{ secret.ansible_user_password }}"
+    key: "files/ansible_rsa.pub"  # ssh public_key
+    secret_key: "files/ansible_rsa" # ssh private_key
+    login_shell: '/bin/bash'
+    create_home: 'yes'
+    sudo: 'present'
+    comment: 'ansible user'
+    expires: '-1'
+```
+### group_vars/conoha/docker.yml
+```yml
+mount_dir: '/softether' # contaiter mount dir (docer -v ..)
+project_name: 'Ansible-SoftEther' # this project dir name
+docker_server:  # For test
+  hosts:  # Test hosts
+    - host_ip: "127.0.0.1"
+      ssh_port: 2223  # this is example, change your environment
+      image_tag: "softether" # As you like
+      container_tag: "softether001" # As you like
+      container_ip: ""
+    - host_ip: "127.0.0.1"
+      ssh_port: 2224 # this is example, change your environment
+      image_tag: "softether" # As you like
+      container_tag: "softether002" # As you like
+      container_ip: ""
+  image_tag: "softether" # As you like
+  inventory_name: "docker_server"  # As you like
+docker_client:  # For test and doploy
+  hosts:
+    - host_ip: "127.0.0.1"
+      ssh_port: 2222  # this is example, change your environment
+      image_tag: "softether_client" # As you like
+      container_tag: "softether_client" # As you like
+      container_ip: ""
+  image_tag: "softether" # As you like
+  inventory_name: "docker_client" # As you like
+
+
 ```
 ### group_vars/conoha/uers.yml
 ```yml
@@ -79,42 +109,88 @@ user_groups: # groups
     state: 'present'
 ```
 
+### group_vars/conoha/hostname.yml
+```yml
+hostname: 'example.yourdomain' # As you like
+```
 
 ### group_vars/conoha/sshs.yml
 ```yml
-sshd_port: 50022 #Default 22
+sshd_port: 50022 # As you like Default 22
 ```
 
 ### group_vars/conoha/secret.yml 
 ```yml
 secret:
-  root_user_password: 'Server_Root_Password'
-  ansible_user_password: 'User_Password'
-  softether_ipsec_presharedkey: "Share_ley"
-  softether_administrator_password: 'SoftEther_Administrator_Password'
-  softether_user: 'SoftEther_User_Name'
-  softether_password: 'SoftEther_User_Password'
-
-  root_user_password: 'Server_Root_Password' #サーバーのルートパスワード
-  ansible_user_password: 'User_Password' #サーバーの一般ユーザーパスワード
-  softether_ipsec_presharedkey: "Share_Key"  #Ipsec 共有キー
-  softether_administrator_password: 'Softether_Administrator_Password' #SoftEtherの管理者パスワード
-  
-softether_vpn_users: # VPN Users
-  - {
-    name: "{{ softether_worker001 }}",
-    password: "{{ softether_worker001_password }}"
-  }
-  - {
-    name: "{{ softether_worker002 }}",
-    password: "{{ softether_worker002_password }}"
-  }
+  ansible_user_password: 'User_Password'  # Ansile user password
+  softether_ipsec_presharedkey: "Share_key" # As you like
+  softether_administrator_password: 'SoftEther_Administrator_Password' #softether admin pass softether_vpn_users:
+  # softether ussers
+    - {
+      name: "worker001",
+      password: "workder001_password"
+    }
+    - {
+      name: "worker002",
+      password: "workder002_password"
+    }
 ```
 
-## Ansible 実行
+### group_vars/conoha/conoha.yml 
+For Deploy use conoha API
+```yml
+conoha_account:
+  user: "your_conoha_API_user_name"
+  password: "your_API_password"
+  tenant: "your_API_tenant_id"
+  sec_group: ""
+  script_path: ""
+conoha_servers:
+  -  tag_name: "se_001" # As you like
+     server_root_password: "server_root_password"
+     sec_group: ""
+     script_path: ""
+     flavor_name: "g-c1m512d30"  # plan_name. this is example.(512MB,30G)
+     image_name: "vmi-centos-7.8-amd64-30gb" # image name. This is example.(CentOS 7.8)
+  -  tag_name: "se_002"
+     server_root_password: "VV3bD1m3ns10n"
+     sec_group: ""
+     script_path: ""
+     flavor_name: "g-c1m512d30"
+     image_name: "vmi-centos-7.8-amd64-30gb"
+```
+
+## Test 実行
 ```bash
-ansible-playbook -i hosts/conoha site.yml
+./test.py
 ```
+### 振る舞い
+- ./Dockerfileよりコンテナー起動 (group_vars/conoha/docker.yml)
+- Inventoryfile生成
+- docker_client(group_vars/conoha/docker.yml) へ 'docker exec'実行
+  - ansile-lint
+  - black
+  - flake8
+  - andible-playook
+  - testinfra
+  - docker rm 
+
+## Deploy 実行
+```bash
+./deploy.py
+```
+### 振る舞い
+- conoha insit, Token生成、サーバー追加 (Read group_vars/conoha/conoha.yml)
+  deploy/conoha/config へ token.json, servers.json 生成
+- ./Dockerfileよりコンテナー(docker_client)起動 (group_vars/conoha/docker.yml)
+- Inventoryfile生成 (Read deploy/conoha/config/servers.json)
+- docker_client(group_vars/conoha/docker.yml) へ 'docker exec'実行
+  - ansile-lint
+  - black
+  - flake8
+  - andible-playook
+  - testinfra
+
 
 ## クライアントツールのダウンロード
 

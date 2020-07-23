@@ -1,0 +1,11 @@
+---
+# tasks file for roles/useradd
+# host check
+- name: get hostnname
+  become: true
+  shell: >
+    hostname
+  register: hostname
+  changed_when: False
+  ignore_errors: yes
+

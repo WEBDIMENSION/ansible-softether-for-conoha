@@ -1,0 +1,9 @@
+parseable: true
+quiet: true
+skip_list:
+  - metadata
+  - '204'
+  - '306'
+  - '401'
+use_default_rules: true
+verbosity: 1
