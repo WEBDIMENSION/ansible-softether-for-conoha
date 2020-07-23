@@ -1,0 +1,19 @@
+---
+# defaults file for roles/ansible-useadd
+# Reuquire vars
+# this is example
+ansible_users:
+  - name: 'ansible_user'
+    groups: 'wheel'
+    append: 'yes'
+    state: 'present'
+    remove: 'no'
+    password: "{{ secret.ansible_user_password }}"
+    key: "~/.ssh/ansible_rsa.pub"
+    secret_key: "~/.ssh/ansible_rsa"
+    login_shell: '/bin/bash'
+    create_home: 'yes'
+    sudo: 'present'
+    comment: 'ansible user'
+    expires: '-1'
+

@@ -1,0 +1,4 @@
+---
+# defaults file for bash_it
+#bash_it theme
+bash_it_theme: 'bobby-python'
