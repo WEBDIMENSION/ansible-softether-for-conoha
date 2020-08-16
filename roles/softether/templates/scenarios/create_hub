@@ -31,6 +31,6 @@ IPsecEnable /L2TP:{{softether_ipsec_l2tp}} /L2TPRAW:{{softether_ipsec_l2tpraw}} 
 
 
 {% if softether_option_openvpn %}
-OpenVpnEnable yes /PORTS:1194
+OpenVpnEnable yes /PORTS:{{ softether_openvpn_port }}
 OpenVpnMakeConfig ./generated/openvpn_config.zip
 {% endif %}

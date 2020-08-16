@@ -37,48 +37,81 @@ Rootログインのみの状況からVPN(SoftEther)を構築
   shellモジュールでexpectを展開させた。
 
 ## 設定
-### hosts/conoha
-```yml
-[softether]
-# Server IP address
-target_server_name ansible_host=xxx.xxx.xxx.xxx
-
-[softether:vars]
-ansible_ssh_user=root
-ansible_port=22
-ansible_ssh_pass={{ secret.root_user_password }}
-
-[conoha]
-target_server_name
-```
-
-### group_vars/conoha/common.yml
+### group_vars/softether/ansible_users.yml
 ``` yml
-# timezone
-os_time_zone: "Asia/Tokyo"
-```
-### group_vars/conoha/uers.yml
-```yml
-users: #users
-  - name: 'user_name' # username
+ansible_users:
+  master:
+    name: 'ansible' # username
     groups: 'wheel'
     append: 'yes'
     state: 'present'
     remove: 'no'
     password: "{{ secret.ansible_user_password }}"
-    key: "~/.ssh/ansible_rsa.pub"  #公開鍵
-    secret_key: "~/.ssh/ansible_rsa" # 秘密鍵
+    key: "files/ansible_rsa.pub"  # pulic_key 
+    secret_key: "files/ansible_rsa" # secret_key
     login_shell: '/bin/bash'
     create_home: 'yes'
     sudo: 'present'
-    comment: 'ansible'
+    comment: 'ansible user'
     expires: '-1'
-user_groups: # groups
-  wheel:
-    name: 'wheel'
-    state: 'present'
+# timezone
+os_time_zone: "Asia/Tokyo"
 ```
 
+### group_vars/softether/common.yml
+``` yml
+conoha_account:
+  user: "user" # api user
+  password: "pass" # api password
+  tenant: "tenant_id" # api tenant_id
+  sec_group: ""
+  script_path: ""
+conoha_servers:
+  -  tag_name: "as_you_like001"
+     server_root_password: "password"
+     sec_group: ""
+     script_path: ""
+     flavor_name: "g-c1m512d30" # plan name
+     image_name: "vmi-centos-7.8-amd64-30gb" # image name
+  -  tag_name: "as_you_like002"
+     server_root_password: "password"
+     sec_group: ""
+     script_path: ""
+     flavor_name: "g-c1m512d30"
+     image_name: "vmi-centos-7.8-amd64-30gb"
+```
+### group_vars/softether/docker.yml
+```yml
+mount_dir: '/softether'
+project_name: 'Ansible-SoftEther'
+docker_server:
+  hosts:
+    - host_ip: "127.0.0.1"
+      ssh_port: 2223  # As you like
+      image_tag: "softether"  # As you like
+      container_tag: "softether001"  # As you like
+      container_ip: ""
+    - host_ip: "127.0.0.1"
+      ssh_port: 2224  # As you like
+      image_tag: "softether"  # As you likea
+      container_tag: "softether002"  # As you like
+      container_ip: ""
+  image_tag: "softether"
+  inventory_name: "docker_server"
+docker_client:
+  hosts:
+    - host_ip: "127.0.0.1"
+      ssh_port: 2222  # As you like
+      image_tag: "softether_client"  # As you like
+      container_tag: "softether_client"  # As you like
+      container_ip: ""
+  image_tag: "softether"  # As you like
+  inventory_name: "docker_client" 
+```
+### group_vars/softether/hostname.yml
+```yml
+hostname: 'example.yourdomain' # as you like
+```
 
 ### group_vars/conoha/sshs.yml
 ```yml
@@ -88,33 +121,50 @@ sshd_port: 50022 #Default 22
 ### group_vars/conoha/secret.yml 
 ```yml
 secret:
-  root_user_password: 'Server_Root_Password'
   ansible_user_password: 'User_Password'
-  softether_ipsec_presharedkey: "Share_ley"
+  softether_ipsec_presharedkey: "Share_key"
   softether_administrator_password: 'SoftEther_Administrator_Password'
-  softether_user: 'SoftEther_User_Name'
-  softether_password: 'SoftEther_User_Password'
-
-  root_user_password: 'Server_Root_Password' #サーバーのルートパスワード
-  ansible_user_password: 'User_Password' #サーバーの一般ユーザーパスワード
-  softether_ipsec_presharedkey: "Share_Key"  #Ipsec 共有キー
-  softether_administrator_password: 'Softether_Administrator_Password' #SoftEtherの管理者パスワード
-  
-softether_vpn_users: # VPN Users
-  - {
-    name: "{{ softether_worker001 }}",
-    password: "{{ softether_worker001_password }}"
-  }
-  - {
-    name: "{{ softether_worker002 }}",
-    password: "{{ softether_worker002_password }}"
-  }
+  softether_vpn_users: # SoftEther users
+    - {
+      name: "worker001",
+      password: "workder001_password"
+    }
+    - {
+      name: "worker002",
+      password: "workder002_password"
+    }
 ```
 
-## Ansible 実行
+## Tests 実行
 ```bash
-ansible-playbook -i hosts/conoha site.yml
+.tests.py
 ```
+### 振る舞い
+- Docker container 起動 (group_vars/softether/docker.yml)
+- Inventoryfile 生成
+- Dcoekr container (client) へ docker exec
+  - ansile-lint
+  - black
+  - flake8
+  - ansile-playbook
+  - testinfra
+- Docker cleanUp
+
+## Diploy 実行
+```bash
+.deploy.py
+```
+### 振る舞い
+- Docker container 起動 (group_vars/softether/docker.yml)
+- Inventoryfile 生成
+- conoha token生成
+- conoha VPS生成
+- Dcoekr container (client) へ docker exec
+  - ansile-lint
+  - black
+  - flake8
+  - ansile-playbook
+  - testinfra
 
 ## クライアントツールのダウンロード
 

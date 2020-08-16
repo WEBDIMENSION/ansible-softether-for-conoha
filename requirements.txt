@@ -1,0 +1,7 @@
+ansible
+ansible-lint
+flake8
+black
+pyyaml
+testinfra
+pytest

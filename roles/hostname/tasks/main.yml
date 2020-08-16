@@ -2,7 +2,7 @@
 # tasks file for roles/hostname
 - name: Check hostname
   become: true
-  shell: bash -lc "hostname"
+  command: bash -lc "hostname"
   register: check_hostname
   changed_when: False
 
@@ -13,8 +13,17 @@
   debug:
     msg: "{{ hostname }}"
 
+- name: before Set hostname
+  become: true
+  hostname:
+    name: "{{ hostname }}"
+  register: set_hostname
+  when: check_hostname.stdout != hostname
+  changed_when: False
+  ignore_errors: yes
+
 - name: Set hostname
   become: true
-  shell: bash -lc "hostnamectl set-hostname {{ hostname }}"
-  when: check_hostname.stdout != "{{ hostname }}"
-
+  hostname:
+    name: "{{ hostname }}"
+  when: set_hostname is false

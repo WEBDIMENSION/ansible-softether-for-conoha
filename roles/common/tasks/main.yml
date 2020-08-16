@@ -7,12 +7,37 @@
   changed_when: False
   ignore_errors: yes
 
-- name: Install tools
+- name: Install Tmezone
   become: true
   shell: |
     timedatectl set-timezone "{{ os_time_zone }}"
   when:
-    - time_zone.stdout != "{{ os_time_zone }}"
+    - time_zone.stdout != os_time_zone
+
+- name: yum fasterstmirror
+  lineinfile:
+    path: '/etc/yum/pluginconf.d/fastestmirror.conf'
+    line: "enabled=1"
+    state: present
+    regexp: "^#?enabled="
+    insertafter: EOF
+    create: yes
+    owner: root
+    group: root
+    mode: 0644
+
+- name: yum fasterstmirror
+  blockinfile:
+    path: '/etc/yum/pluginconf.d/fastestmirror.conf'
+    block: |
+      prefer=ftp.jaist.ac.jp
+      verbose=1
+    state: present
+    create: yes
+    owner: root
+    group: root
+    mode: 0644
+
 
 - name: install epel
   become: true
@@ -23,7 +48,9 @@
 - name: yum update
   become: true
   yum:
-    update_cache: yes
+    name: '*'
+    # state: latest
+    # update_cache: yes
 
 - name: install development tools
   become: true
@@ -31,16 +58,3 @@
     name: "@Development tools"
     state: present
     skip_broken: true
-
-#- name: common | Install package dependencies
-#  become: true
-#  yum:
-#    name: "{{item}}"
-#  with_items:
-#    - make
-#    - gcc
-#    - libssl-dev
-#  when: vpnserver_present is failed
-#  tags:
-#    - softether
-

@@ -1,2 +1,7 @@
 ---
-# handlers file for roles/ansible-useadd
+# handlers file for roles/useradd
+- name: Restart sshd
+  become: true
+  service:
+    name: sshd
+    state: restarted
