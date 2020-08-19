@@ -1,5 +1,5 @@
 mount_dir: '/softether'
-project_name: 'Ansible-SoftEther'
+project_name: 'Ansible-SoftEther-For-Conoha'
 docker_server:
   hosts:
     - host_ip: "127.0.0.1"
