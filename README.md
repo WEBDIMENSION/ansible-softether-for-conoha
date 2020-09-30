@@ -7,23 +7,23 @@ Conoha VPNは立ち上げ時Rootでのログインのみとなる。
 Rootログインのみの状況からVPN(SoftEther)を構築
 - Conoha にてVPSサーバー立ち上げ
 - AnsibleにてVPN構築
-  - Rootでログイン 
+  - Rootでログイン
   - 一般ユーザー作成 ( ssh鍵登録 ）
   - sshd Root login を無効
   - パスワード認証無効  (鍵認証のみ)
-  - Firewalld 設定 
-  - hostname 設定 
+  - Firewalld 設定
+  - hostname 設定
   - SoftEther インストール
-  
+
 ## 環境
 ***Local***
 - Ubuntu 18.04
-- Ansible 2.9.7 
-
+- Ansible 2.9.7
+important consideration
 ***Server***
 - CentOS 7.8 (Conoha VPS 512MB)
 
-## 参考サイト 
+## 参考サイト
 - <a href="https://galaxy.ansible.com/softasap/sa-vpn-softether" target="_blank">
   Ansible galaxy  [sa-vpn-softether]
   </a>
@@ -118,7 +118,7 @@ hostname: 'example.yourdomain' # as you like
 sshd_port: 50022 #Default 22
 ```
 
-### group_vars/conoha/secret.yml 
+### group_vars/conoha/secret.yml
 ```yml
 secret:
   ansible_user_password: 'User_Password'
