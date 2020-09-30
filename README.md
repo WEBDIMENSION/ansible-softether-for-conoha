@@ -58,7 +58,7 @@ ansible_users:
 os_time_zone: "Asia/Tokyo"
 ```
 
-### group_vars/softether/common.yml
+### group_vars/softether/conoha.yml
 ``` yml
 conoha_account:
   user: "user" # api user
