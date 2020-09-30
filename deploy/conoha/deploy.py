@@ -353,7 +353,7 @@ class DeployClass:
         [softether:vars]
         ansible_user={ansible_user}
         ansible_port={ansible_ssh_port}
-        ansible_ssh_private_key_file={mount_dir}/roles/ansible-user/{key}\
+        ansible_ssh_private_key_file={mount_dir}/roles/ansible_user/{key}\
         """
             )
             .format(

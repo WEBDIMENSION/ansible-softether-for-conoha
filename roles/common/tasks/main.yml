@@ -58,3 +58,30 @@
     name: "@Development tools"
     state: present
     skip_broken: true
+
+
+- name: Remove default Git
+  become: true
+  yum:
+    name: git
+    state: absent
+
+- name: Install git require
+  become: true
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - 'https://repo.ius.io/ius-release-el7.rpm'
+    - 'https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm'
+    - libsecret
+    - pcre2
+    - emacs
+
+- name: Install git
+  become: true
+  yum:
+    name: 'git'
+    enablerepo: "ius"
+    disablerepo: "base,epel,extras,updates"
+

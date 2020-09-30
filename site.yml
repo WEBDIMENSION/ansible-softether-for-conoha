@@ -7,7 +7,7 @@
         - common
         - softether
 
-    - role: ansible-user
+    - role: ansible_user
       tags:
         - init
         - softether
