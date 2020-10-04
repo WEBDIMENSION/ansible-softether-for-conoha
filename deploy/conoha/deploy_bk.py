@@ -281,7 +281,7 @@ class DeployClass:
         for i in range(len(docker_client["hosts"])):
             print("-- Dcoekr build ---")
             subprocess.run(
-                "docker build .dockerfiles/" + docker_client["hosts"][i]["dockerfile"] + "/ -t " + docker_client["hosts"][i]["image_tag"],
+                "docker build . -t " + docker_client["hosts"][i]["image_tag"],
                 shell=True,
                 check=True,
             )
@@ -388,7 +388,7 @@ class DeployClass:
             + docker_client["hosts"][0]["container_tag"]
             + " bash -c 'cd "
             + str(self.vars_docker["mount_dir"])
-            + " && pip3 install -r requirements.txt'",
+            + " && /root/.pyenv/shims/pip install -r requirements.txt'",
             shell=True,
             check=True,
         )
@@ -399,7 +399,7 @@ class DeployClass:
             + docker_client["hosts"][0]["container_tag"]
             + " bash -c 'cd "
             + str(self.vars_docker["mount_dir"])
-            + " && pip3 install --upgrade pip'",
+            + " && /root/.pyenv/shims/pip install --upgrade pip'",
             shell=True,
             check=True,
         )
@@ -410,7 +410,7 @@ class DeployClass:
             + docker_client["hosts"][0]["container_tag"]
             + " bash -c 'cd "
             + str(self.vars_docker["mount_dir"])
-            + " && ansible-lint site.yml'",
+            + " && /root/.pyenv/shims/ansible-lint site.yml'",
             shell=True,
             check=True,
         )
@@ -422,7 +422,7 @@ class DeployClass:
             + docker_client["hosts"][0]["container_tag"]
             + " bash -c 'cd "
             + str(self.vars_docker["mount_dir"])
-            + " && black tests tests.py deploy deploy.py'",
+            + " && /root/.pyenv/shims/black tests tests.py deploy deploy.py'",
             shell=True,
             check=True,
         )
@@ -433,7 +433,7 @@ class DeployClass:
             + docker_client["hosts"][0]["container_tag"]
             + " bash -c 'cd "
             + str(self.vars_docker["mount_dir"])
-            + " && flake8 tests tests.py deploy deploy.py'",
+            + " && /root/.pyenv/shims/flake8 tests tests.py deploy deploy.py'",
             shell=True,
             check=True,
         )
@@ -443,7 +443,7 @@ class DeployClass:
             + docker_client["hosts"][0]["container_tag"]
             + " bash -c 'cd "
             + str(self.vars_docker["mount_dir"])
-            + " && ansible-playbook site.yml -i hosts/product_root"
+            + " && /root/.pyenv/shims/ansible-playbook site.yml -i hosts/product_root"
             + " -t softether'",
             shell=True,
             check=True,
@@ -454,7 +454,7 @@ class DeployClass:
             + docker_client["hosts"][0]["container_tag"]
             + " bash -c 'cd "
             + str(self.vars_docker["mount_dir"])
-            + " && ansible-playbook site.yml -i hosts/product_user"
+            + " && /root/.pyenv/shims/ansible-playbook site.yml -i hosts/product_user"
             + " -t tools'",
             shell=True,
             check=True,
@@ -466,7 +466,7 @@ class DeployClass:
             + docker_client["hosts"][0]["container_tag"]
             + ' bash -c "cd '
             + str(self.vars_docker["mount_dir"])
-            + " && py.test -v tests/testinfra.py"
+            + " && /root/.pyenv/shims/py.test -v tests/testinfra.py"
             + " --connection=ssh"
             + " --hosts='ansible://softether'"
             + " --ansible-inventory='hosts/product_user'\"",
