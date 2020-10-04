@@ -66,15 +66,11 @@ class DockerClass:
         for i in range(len(marge_hosts)):
             print("-- Dcoekr build ---")
             subprocess.run(
-                "docker build ./dockerfiles/"
-                + marge_hosts[i]["dockerfile"]
-                + "/ -t "
-                + marge_hosts[i]["image_tag"],
+                "docker build . -t " + marge_hosts[i]["image_tag"],
                 shell=True,
                 check=True,
             )
             # project_name = self.vars_docker["project_name"]
-        for i in range(len(docker_client["hosts"])):
             print("--- Dcoekr run ---")
             subprocess.run(
                 "docker run -itd --privileged -v "
@@ -84,24 +80,11 @@ class DockerClass:
                 + ":"
                 + self.vars_docker["mount_dir"]
                 + " -p "
-                + str(docker_client["hosts"][i]["ssh_port"])
+                + str(marge_hosts[i]["ssh_port"])
                 + ":22 --name "
-                + docker_client["hosts"][i]["container_tag"]
+                + marge_hosts[i]["container_tag"]
                 + " "
-                + docker_client["hosts"][i]["image_tag"],
-                shell=True,
-                check=True,
-            )
-        for i in range(len(docker_server["hosts"])):
-            print("--- Dcoekr run ---")
-            subprocess.run(
-                "docker run -itd --privileged "
-                + " -p "
-                + str(docker_server["hosts"][i]["ssh_port"])
-                + ":22 --name "
-                + docker_server["hosts"][i]["container_tag"]
-                + " "
-                + docker_server["hosts"][i]["image_tag"],
+                + marge_hosts[i]["image_tag"],
                 shell=True,
                 check=True,
             )
@@ -109,7 +92,7 @@ class DockerClass:
             # Get cotainer IP
             porcess = subprocess.run(
                 'sudo docker inspect --format "{{ .NetworkSettings.IPAddress }}" '
-                + docker_server["hosts"][i]["container_tag"],
+                + marge_hosts[i]["container_tag"],
                 shell=True,
                 stdout=PIPE,
                 stderr=PIPE,
@@ -117,9 +100,9 @@ class DockerClass:
                 check=True,
             )
             self.container_ip = porcess.stdout
-            docker_server["hosts"][i]["container_ip"] = str(self.container_ip).strip()
+            marge_hosts[i]["container_ip"] = str(self.container_ip).strip()
             print(
-                docker_server["hosts"][i]["container_tag"]
+                marge_hosts[i]["container_tag"]
                 + " Container IP : "
                 + str(self.container_ip)
             )
@@ -192,8 +175,7 @@ class DockerClass:
             + docker_client["hosts"][0]["container_tag"]
             + " bash -c 'cd "
             + str(self.vars_docker["mount_dir"])
-            # + " && /root/.pyenv/shims/pip install -r requirements.txt'",
-            + " && pip3 install -r requirements.txt'",
+            + " && /root/.pyenv/shims/pip install -r requirements.txt'",
             shell=True,
             check=True,
         )
@@ -204,8 +186,7 @@ class DockerClass:
             + docker_client["hosts"][0]["container_tag"]
             + " bash -c 'cd "
             + str(self.vars_docker["mount_dir"])
-            # + " && /root/.pyenv/shims/pip install --upgrade pip'",
-            + " && pip3 install --upgrade pip'",
+            + " && /root/.pyenv/shims/pip install --upgrade pip'",
             shell=True,
             check=True,
         )
@@ -216,8 +197,7 @@ class DockerClass:
             + docker_client["hosts"][0]["container_tag"]
             + " bash -c 'cd "
             + str(self.vars_docker["mount_dir"])
-            # + " && /root/.pyenv/shims/ansible-lint site.yml'",
-            + " && ansible-lint site.yml'",
+            + " && /root/.pyenv/shims/ansible-lint site.yml'",
             shell=True,
             check=True,
         )
@@ -228,8 +208,7 @@ class DockerClass:
             + docker_client["hosts"][0]["container_tag"]
             + " bash -c 'cd "
             + str(self.vars_docker["mount_dir"])
-            # + " && /root/.pyenv/shims/black tests tests.py deploy deploy.py'",
-            + " && black tests tests.py deploy deploy.py'",
+            + " && /root/.pyenv/shims/black tests tests.py deploy deploy.py'",
             shell=True,
             check=True,
         )
@@ -240,8 +219,7 @@ class DockerClass:
             + docker_client["hosts"][0]["container_tag"]
             + " bash -c 'cd "
             + str(self.vars_docker["mount_dir"])
-            # + " && /root/.pyenv/shims/flake8 tests tests.py deploy deploy.py'",
-            + " && flake8 tests tests.py deploy deploy.py'",
+            + " && /root/.pyenv/shims/flake8 tests tests.py deploy deploy.py'",
             shell=True,
             check=True,
         )
@@ -251,8 +229,7 @@ class DockerClass:
             + docker_client["hosts"][0]["container_tag"]
             + " bash -c 'cd "
             + str(self.vars_docker["mount_dir"])
-            # + " && /root/.pyenv/shims/ansible-playbook site.yml -i hosts/"
-            + " && ansible-playbook site.yml -i hosts/"
+            + " && /root/.pyenv/shims/ansible-playbook site.yml -i hosts/"
             + docker_server["inventory_name"]
             + "_root"
             + " -t softether'",
@@ -266,8 +243,7 @@ class DockerClass:
             + docker_client["hosts"][0]["container_tag"]
             + " bash -c 'cd "
             + str(self.vars_docker["mount_dir"])
-            # + " && /root/.pyenv/shims/ansible-playbook site.yml -i hosts/"
-            + " && ansible-playbook site.yml -i hosts/"
+            + " && /root/.pyenv/shims/ansible-playbook site.yml -i hosts/"
             + docker_server["inventory_name"]
             + "_user"
             + " -t tools'",
@@ -282,8 +258,7 @@ class DockerClass:
             + docker_client["hosts"][0]["container_tag"]
             + ' bash -c "cd '
             + str(self.vars_docker["mount_dir"])
-            # + " && /root/.pyenv/shims/py.test -v tests/testinfra.py"
-            + " && py.test -v tests/testinfra.py"
+            + " && /root/.pyenv/shims/py.test -v tests/testinfra.py"
             + " --connection=ssh"
             + " --hosts='ansible://softether'"
             + " --ansible-inventory='hosts/"
