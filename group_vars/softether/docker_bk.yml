@@ -4,16 +4,15 @@ docker_server:
   hosts:
     - host_ip: "127.0.0.1"
       ssh_port: 2223
-      image_tag: "softether_server"
+      image_tag: "softether"
       container_tag: "softether001"
       container_ip: ""
-      dockerfile: "centos7"
-#    - host_ip: "127.0.0.1"
-#      ssh_port: 2224
-#      image_tag: "softether_server"
-#      container_tag: "softether002"
-#      container_ip: ""
-#      dockerfile: "centos7"
+    - host_ip: "127.0.0.1"
+      ssh_port: 2224
+      image_tag: "softether"
+      container_tag: "softether002"
+      container_ip: ""
+  image_tag: "softether"
   inventory_name: "docker_server"
 docker_client:
   hosts:
@@ -22,5 +21,5 @@ docker_client:
       image_tag: "softether_client"
       container_tag: "softether_client"
       container_ip: ""
-      dockerfile: "ubuntu20.04"
+  image_tag: "softether"
   inventory_name: "docker_client"

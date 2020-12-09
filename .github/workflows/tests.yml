@@ -1,0 +1,82 @@
+name: softeher_tests
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-1804
+    steps:
+      - uses: actions/checkout@v2
+      - name: docker server start
+        run: |
+          docker build -f dockerfiles/centos7/Dockerfile . -t softether_server
+          docker run -itd --privileged --name softether_server softether_server
+          sleep 5
+          container_ip=$(docker inspect --format "{{ .NetworkSettings.IPAddress }}" softether_server)
+          echo "server ip :  $container_ip"
+          echo "
+          [softether]
+          $container_ip
+          [softether:vars]
+          ansible_user=root
+          ansible_ssh_pass=password
+          " >> hosts/act_root
+
+          echo "
+          [softether]
+          $container_ip
+          [softether:vars]
+          ansible_user=ansible
+          ansible_port=50022
+          ansible_ssh_private_key_file=roles/ansible_user/files/ansible_rsa
+          " >> hosts/act_user
+
+          ls -ls hosts/*
+
+          mkdir /github/home/.ssh
+          chmod 700 /github/home/.ssh
+          echo "Host *
+                StrictHostKeyChecking no
+
+          ServerAliveInterval 60
+          ServerAliveCountMax 10"  >> /github/home/.ssh/config
+
+          chmod 600 /github/home/.ssh/config
+          cat /github/home/.ssh/config
+
+          apt -y install make build-essential libssl-dev zlib1g-dev libbz2-dev \
+          libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
+          xz-utils tk-dev libffi-dev liblzma-dev
+
+          curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+          export PATH="/github/home/.pyenv/bin:$PATH"
+          pyenv install 3.6.7
+          pyenv global 3.6.7
+          /github/home/.pyenv/shims/pip install -r requirements.txt
+
+
+
+          /github/home/.pyenv/shims/ansible-lint site.yml
+          /github/home/.pyenv/shims/black tests tests.py deploy deploy.py
+          /github/home/.pyenv/shims/flake8 tests tests.py deploy deploy.py
+
+          echo 'password' >> vaultpass
+          /github/home/.pyenv/shims/ansible-playbook site.yml -i hosts/act_root -t softether
+          /github/home/.pyenv/shims/ansible-playbook site.yml -i hosts/act_user -t tools
+
+
+          /github/home/.pyenv/shims/py.test -v tests/testinfra.py \
+          --connection=ssh \
+          --hosts='ansible://softether' \
+          --ansible-inventory='hosts/act_user' \
+          --ssh-config='/github/home/.ssh/config'
+#
+#      - name: tests
+#        run: |
+#          /github/home/.pyenv/shims/py.test -v tests/testinfra.py \
+#          --connection=ssh \
+#          --hosts='ansible://softether' \
+#          --ansible-inventory='hosts/act_user'

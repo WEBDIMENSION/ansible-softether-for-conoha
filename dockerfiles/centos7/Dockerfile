@@ -1,18 +1,8 @@
 FROM centos:centos7
-#RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
-#rm -f /lib/systemd/system/multi-user.target.wants/*;\
-#rm -f /etc/systemd/system/*.wants/*;\
-#rm -f /lib/systemd/system/local-fs.target.wants/*; \
-#rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
-#rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
-#rm -f /lib/systemd/system/basic.target.wants/*;\
-#rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 VOLUME [ "/sys/fs/cgroup" ]
-# 後々必要そうなパッケージをまとめてインストール
 RUN yum -y update; yum clean all
 RUN yum -y install openssh-server passwd; yum clean all
-# Install which
 RUN yum install -y which
 RUN yum install -y https://repo.ius.io/ius-release-el7.rpm
 #RUN yum install -y gcc openssl-devel bzip2-devel libffi-devel
@@ -22,31 +12,29 @@ RUN yum install -y sudo
 RUN yum install -y wget
 RUN yum install -y curl
 RUN yum install -y sshpass
-RUN yum -y install \
-  bzip2 \
-  bzip2-devel \
-  gcc \
-  git \
-  libffi-devel \
-  openssl \
-  openssl-devel \
-  readline \
-  readline-devel \
-  sqlite \
-  sqlite-devel \
-  zlib-devel
-RUN curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
-RUN echo $'\n\
-    export PATH="/root/.pyenv/bin:$PATH"\n\
-    eval "$(pyenv init -)"\n\
-    eval "$(pyenv virtualenv-init -)"\n\
-    ' >> /root/.bashrc
-RUN /root/.pyenv/bin/pyenv install 3.7.6
-RUN /root/.pyenv/bin/pyenv global 3.7.6
-RUN /root/.pyenv/bin/pyenv rehash
-RUN /root/.pyenv/shims/python -m pip install --upgrade pip
-COPY ./ /softether
-WORKDIR /sofeether
+#RUN yum -y install \
+#  bzip2 \
+#  bzip2-devel \
+#  gcc \
+#  git \
+#  libffi-devel \
+#  openssl \
+#  openssl-devel \
+#  readline \
+#  readline-devel \
+#  sqlite \
+#  sqlite-devel \
+#  zlib-devel
+#RUN curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
+#RUN echo $'\n\
+#    export PATH="/root/.pyenv/bin:$PATH"\n\
+#    eval "$(pyenv init -)"\n\
+#    eval "$(pyenv virtualenv-init -)"\n\
+#    ' >> /root/.bashrc
+#RUN /root/.pyenv/bin/pyenv install 3.7.6
+#RUN /root/.pyenv/bin/pyenv global 3.7.6
+#RUN /root/.pyenv/bin/pyenv rehash
+#RUN /root/.pyenv/shims/python -m pip install --upgrade pip
 #RUN yum install -y jq
 #RUN yum install -y sshpass
 

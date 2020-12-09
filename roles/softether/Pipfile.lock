@@ -225,7 +225,7 @@
                 "sha256:fb70a4cedd69dc52396ee114416a3656e011fb0311fca55eb55c7be6ed9c8aef"
             ],
             "index": "pypi",
-            "version": "==3.2"
+            "version": "==3.2"G
         },
         "distlib": {
             "hashes": [

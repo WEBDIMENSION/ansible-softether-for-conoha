@@ -1,6 +1,7 @@
 # Conoha VPS サーバーでVPN (SoftEther) をAnsibleで構築
 
-[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/webdimension/ansible-softether-for-conoha?include_prereleases)
+![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/webdimension/ansible-softether-for-conoha?include_prereleases)
 
 ## 概要
 Conoha VPNは立ち上げ時Rootでのログインのみとなる。
