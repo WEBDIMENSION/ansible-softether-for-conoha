@@ -4,5 +4,5 @@ ansible-lint == 4.3.1
 black == 19.10b0
 flake8 == 3.8.3
 pytest == 5.4.3
-pyyaml == 5.3.1
+pyyaml == 5.4
 testinfra == 5.2.2
