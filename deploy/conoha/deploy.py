@@ -466,7 +466,8 @@ class DeployClass:
             + docker_client["hosts"][0]["container_tag"]
             + ' bash -c "cd '
             + str(self.vars_docker["mount_dir"])
-            + " && py.test -v tests/testinfra.py"
+            + " && "
+              "py.test -v tests/testinfra.py"
             + " --connection=ssh"
             + " --hosts='ansible://softether'"
             + " --ansible-inventory='hosts/product_user'\"",

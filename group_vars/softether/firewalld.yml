@@ -18,7 +18,7 @@
    immediate: true
 
  firewalld_ports:
-   - port: "{{ softether_openvpn_port }}/tcp"
+   - port: "{{ softether_openvpn_portsoftether_openvpn_port }}/tcp"
      permanent: "yes"
      state: "enabled"
    - port: "{{ sshd_port }}/tcp"
